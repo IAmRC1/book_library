@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/book_library/static/css/main.55fd3ffc.chunk.css",
+    "main.js": "/book_library/static/js/main.1e8322e8.chunk.js",
+    "main.js.map": "/book_library/static/js/main.1e8322e8.chunk.js.map",
+    "runtime-main.js": "/book_library/static/js/runtime-main.6059cb11.js",
+    "runtime-main.js.map": "/book_library/static/js/runtime-main.6059cb11.js.map",
+    "static/css/2.bb25cdbb.chunk.css": "/book_library/static/css/2.bb25cdbb.chunk.css",
+    "static/js/2.c07cfff8.chunk.js": "/book_library/static/js/2.c07cfff8.chunk.js",
+    "static/js/2.c07cfff8.chunk.js.map": "/book_library/static/js/2.c07cfff8.chunk.js.map",
+    "index.html": "/book_library/index.html",
+    "static/css/2.bb25cdbb.chunk.css.map": "/book_library/static/css/2.bb25cdbb.chunk.css.map",
+    "static/css/main.55fd3ffc.chunk.css.map": "/book_library/static/css/main.55fd3ffc.chunk.css.map",
+    "static/js/2.c07cfff8.chunk.js.LICENSE.txt": "/book_library/static/js/2.c07cfff8.chunk.js.LICENSE.txt",
+    "static/media/logout.ac16fec1.svg": "/book_library/static/media/logout.ac16fec1.svg",
+    "static/media/pencil.372bf1c0.svg": "/book_library/static/media/pencil.372bf1c0.svg",
+    "static/media/trash.43abd16f.svg": "/book_library/static/media/trash.43abd16f.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6059cb11.js",
+    "static/css/2.bb25cdbb.chunk.css",
+    "static/js/2.c07cfff8.chunk.js",
+    "static/css/main.55fd3ffc.chunk.css",
+    "static/js/main.1e8322e8.chunk.js"
+  ]
+}
