@@ -1,22 +1,28 @@
 import axios from 'axios'
 
-const token = localStorage.getItem('assignment_token')
-const baseURL = 'http://assignment.cyberboxer.com'
+const token = JSON.parse(localStorage.getItem('userData'))?.token
+console.log(`token`, token)
+const baseURL = 'http://localhost:4000/api/v1'
 
-const handleApi = async (url, method, isTokenIncluded, formBody = {}) => {
+const handleApi = async (url, method, isTokenIncluded = false, formBody = {}) => {
+
+  let headers;
   
-  let headers = {
-    'Content-Type': 'multipart/form-data'
-  }
-
   if(isTokenIncluded){
     headers = {
-      'Content-Type': 'multipart/form-data',
       'Authorization': `Bearer ${token}`
     }
   }
 
-  return await axios.request({ url, method, baseURL, headers, data: formBody })
+  const data = await axios.request({ 
+    url: `${baseURL}${url}`, 
+    method, 
+    baseURL, 
+    headers, 
+    data: formBody 
+  })
+
+  return data;
 }
 
 export default handleApi;

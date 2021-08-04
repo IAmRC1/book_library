@@ -1,29 +1,26 @@
 import React from 'react'
-import { useFormik } from 'formik';
-import { toast } from 'react-toastify';
+import { useFormik } from 'formik'
+import { toast } from 'react-toastify'
 import handleApi from '../api/handleApi'
+import history from '../utils/history'
+// import { GoogleLogin } from 'react-google-login'
 
-export default function Login({ history, setIsAuthenticated }) {
+export default function Login({ setIsAuthenticated }) {
 
-  const login = (values, { setSubmitting, resetForm }) => {
-    const formdata = new FormData();
-    formdata.append("email", values.email);
-    formdata.append("password", values.password);
-
-    handleApi('/auth/login', 'post', false, formdata)
-    .then(res => {
-      if(res.data.status === 0){
-        resetForm()
-        setSubmitting(false)
-        return toast.error(res.data.message)
-      }
-      if(res.data.status === 1){
-        localStorage.setItem('assignment_token', res.data.data.token)
-        setIsAuthenticated(true)
-        history.push('/home')
-        return toast.success('Logged in successfully!')
-      }
-    })
+  const login = async (values, { setSubmitting, resetForm }) => {
+    const body = {
+      email: values.email,
+      password: values.password
+    }
+    try {
+      const { result: { data: { data }}} = await handleApi('/auth/login', 'post', false, body)
+      const userData = { profile: data.user, token: data.token }
+      localStorage.setItem('userData', JSON.stringify(userData))
+      setIsAuthenticated(true)
+      history.push('/home')
+    } catch (error) {
+      console.error(`error`, error)
+    }
   }
 
   const validate = values => {
@@ -54,7 +51,7 @@ export default function Login({ history, setIsAuthenticated }) {
   const { values, errors, touched, isSubmitting, handleChange, handleBlur, handleSubmit } = formik;
 
   return (
-    <div className="container vh-100 d-flex align-items-center justify-content-center">
+    <div className="container d-flex align-items-center justify-content-center vh-100">
       <form className="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-xl-4 m-auto" onSubmit={handleSubmit} noValidate>
         <h1 className="h1 mb-3 text-center font-weight-bold text-uppercase">login</h1>
         <div className="mb-2">

@@ -5,22 +5,31 @@ import history from './utils/history'
 import ProtectedRoutes from './routes/ProtectedRoutes'
 
 function App() {
-  const assignment_token = localStorage.getItem('assignment_token')
-  const [isAuthenticated, setIsAuthenticated] = useState(assignment_token && assignment_token.length > 0)
+  const token = JSON.parse(localStorage.getItem('userData'))?.token
+  const [isAuthenticated, setIsAuthenticated] = useState(token && token.length > 0)
+
+  // useEffect(() => {
+  //   if(token){
+  //     setIsAuthenticated(true)
+  //   } else {
+  //     setIsAuthenticated(false)
+  //   }
+  // }, [token])
 
   useEffect(() => {
-    if(assignment_token){
+    var query = history.location.search;
+    if (query.token) {
       setIsAuthenticated(true)
-    } else {
-      setIsAuthenticated(false)
+      window.localStorage.setItem("jwt", query.token);
+      this.props.history.push("/");
     }
-  }, [assignment_token])
+  }, [])
 
   return (
     <Router history={history}>
       <Switch>
         <Route exact path="/">
-          <Login history={history} setIsAuthenticated={setIsAuthenticated} />
+          <Login setIsAuthenticated={setIsAuthenticated} />
         </Route>
         <ProtectedRoutes
           path='/home'

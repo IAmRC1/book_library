@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import { Spinner } from 'reactstrap'
-import { AddBookModal, EditBookModal, BookCard, Footer, Header, Jumbotron } from '../containers'
+import { BookCard, Footer, Header, Jumbotron } from '../containers'
 import handleApi from '../api/handleApi'
 
-export default function Home({ history, }) {
+export default function Home(props) {
   const [loading, setLoading] = useState(false)
   const [books, setBooks] = useState(null)
-  const [toggleAdd, setToggleAdd] = useState(false)
-  const [toggleEdit, setToggleEdit] = useState(false)
-  const [bookToEdit, setBookToEdit] = useState(null)
   
   const getBooks = () => {
     setLoading(true)
-    handleApi('/books/list', 'get', true)
+    handleApi('/books', 'get', true)
     .then(res => {
       setLoading(false)
       setBooks(res.data.data)
@@ -26,80 +23,18 @@ export default function Home({ history, }) {
 
   useEffect(() => {
     getBooks()
-  }, [])
-
-  const toggleAddBookModal = () => {
-    setToggleAdd(!toggleAdd)
-  }
-
-  const create = (values, { resetForm }) => {
-    const formdata = new FormData();
-    formdata.append("name", values.bookName)
-    formdata.append("author", values.bookAuthor)
-    formdata.append("image", values.bookImage)
-    
-    handleApi('/books/save', 'post', true, formdata)
-    .then(res => {
-      if(res.data.status === 0){
-        toggleAddBookModal()
-        toast.error(res.data.message)
-        resetForm()
-      } else if(res.data.status === 1){
-        getBooks()
-        toggleAddBookModal()
-        toast.success(res.data.message)
-        resetForm()
-      }
-    })
-  }
-
-  const toggleEditBookModal = (id) => {
-    setToggleEdit(!toggleEdit)
-    const singleBook = books.filter(book => book.id === id)[0]
-    setBookToEdit(singleBook)
-  }
-
-  const edit = (values) => {
-    const formdata = new FormData();
-    formdata.append("id", values.id)
-    formdata.append("name", values.bookName)
-    formdata.append("author", values.bookAuthor)
-    formdata.append("image", values.bookImage)
-    
-    handleApi('/books/save', 'post', true, formdata)
-    .then(res => {
-      if(res.data.status === 0){
-        toggleEditBookModal()
-        toast.error(res.data.message)
-      } else if(res.data.status === 1){
-        getBooks()
-        toggleEditBookModal()
-        toast.success(res.data.message)
-      }
-    })
-  }
-
-  const deleteBook = (id) => {
-    const booksAfterDeletion = books.filter(book => book.id !== id)
-    const formdata = new FormData();
-    formdata.append("id", id)
-    handleApi('/books/delete', 'post', true, formdata)
-    .then(res => {
-      setBooks(booksAfterDeletion)
-      toast.success(res.data.message)
-    })
-  }
+  }, [props])
 
   const signOut = () => {
-    localStorage.removeItem('assignment_token')
-    history.push('/')
+    localStorage.removeItem('userData')
+    props.history.push('/')
   }
   
   return (
     <>
       <Header signOut={signOut} />
       <main className="container">
-        <Jumbotron toggleAddBookModal={toggleAddBookModal} />
+        <Jumbotron />
         <div className="row">
           {loading 
             ? <div className="d-flex align-items-center justify-content-center w-100">
@@ -107,12 +42,12 @@ export default function Home({ history, }) {
               </div>
             : books && books.map(book => (
               <BookCard 
-                key={book.id} 
-                name={book.name}
+                key={book._id} 
+                id={book._id}
+                title={book.title}
                 author={book.author}
-                image={book.image}
-                deleteBook={() => deleteBook(book.id)}
-                toggleEditBookModal={() => toggleEditBookModal(book.id)}
+                category={book.category}
+                published={book.published}
               />
             ))
           }
@@ -120,17 +55,6 @@ export default function Home({ history, }) {
       </main>
       <Footer 
         loading={loading} 
-      />
-      <AddBookModal 
-        toggleAdd={toggleAdd}
-        toggleAddBookModal={toggleAddBookModal}
-        create={create}
-      />
-      <EditBookModal 
-        toggleEdit={toggleEdit}
-        toggleEditBookModal={toggleEditBookModal}
-        bookToEdit={bookToEdit}
-        edit={edit}
       />
    </>
   )
