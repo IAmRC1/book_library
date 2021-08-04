@@ -2,4 +2,4 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-# Part of the assignment provided to me by CyberBoxer Company
+Part of the assignment provided to me by City Innovates Company
